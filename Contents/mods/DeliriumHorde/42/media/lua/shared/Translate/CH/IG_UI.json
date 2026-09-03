@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "僵尸数量",
+    "IGUI_DelHor_Radius": "半径",
+    "IGUI_DelHor_SpawnDelay": "生成延迟（秒）",
+    "IGUI_DelHor_LoopCycles": "循环周期",
+    "IGUI_DelHor_LoopCooldown": "循环冷却时间（游戏分钟数）",
+    "IGUI_DelHor_ZombiesOutfit": "僵尸服装",
+    "IGUI_DelHor_PickNewSquare": "选择新广场",
+    "IGUI_DelHor_Spawn": "生成",
+    "IGUI_DelHor_PickedSquare": "挑选的正方形",
+    "IGUI_DelHor_TriggerDistance": "触发距离"
+}

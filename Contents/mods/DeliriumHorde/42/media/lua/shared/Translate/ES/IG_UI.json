@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "Número de Zombis",
+    "IGUI_DelHor_Radius": "Radio",
+    "IGUI_DelHor_SpawnDelay": "Retraso de Spawn (Segundos)",
+    "IGUI_DelHor_LoopCycles": "Ciclos de Loop",
+    "IGUI_DelHor_LoopCooldown": "Cooldown de Loop (Minutos de Juego)",
+    "IGUI_DelHor_ZombiesOutfit": "Atuendo de Zombis",
+    "IGUI_DelHor_PickNewSquare": "Elegir Nuevo Cuadrado",
+    "IGUI_DelHor_Spawn": "Spawn",
+    "IGUI_DelHor_PickedSquare": "Cuadrado Elegido",
+    "IGUI_DelHor_TriggerDistance": "Distancia de Disparo"
+}

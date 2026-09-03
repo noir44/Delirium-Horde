@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "Numer Zombie",
+    "IGUI_DelHor_Radius": "Promień",
+    "IGUI_DelHor_SpawnDelay": "Opóźnienie Odrodzenia (Sekundy)",
+    "IGUI_DelHor_LoopCycles": "Cykle Pętli",
+    "IGUI_DelHor_LoopCooldown": "Czas Odnowienia Pętli (Minuty Gry)",
+    "IGUI_DelHor_ZombiesOutfit": "Strój Zombie",
+    "IGUI_DelHor_PickNewSquare": "Wybierz Nowy Plac",
+    "IGUI_DelHor_Spawn": "Ikra",
+    "IGUI_DelHor_PickedSquare": "Wybrany kwadrat",
+    "IGUI_DelHor_TriggerDistance": "Odległość Wyzwalania"
+}

@@ -1,0 +1,5 @@
+version=1
+title=Delirium Horde
+description=This is test mod
+tags=Build 42
+visibility=public

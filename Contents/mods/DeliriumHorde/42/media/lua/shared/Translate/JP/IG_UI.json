@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "ゾンビ数",
+    "IGUI_DelHor_Radius": "半径",
+    "IGUI_DelHor_SpawnDelay": "スポーン遅延 (秒)",
+    "IGUI_DelHor_LoopCycles": "ループサイクル",
+    "IGUI_DelHor_LoopCooldown": "ループのクールダウン (ゲーム時間)",
+    "IGUI_DelHor_ZombiesOutfit": "ゾンビの衣装",
+    "IGUI_DelHor_PickNewSquare": "新しい広場を選択",
+    "IGUI_DelHor_Spawn": "スポーン",
+    "IGUI_DelHor_PickedSquare": "ピックスクエア",
+    "IGUI_DelHor_TriggerDistance": "トリガー距離"
+}

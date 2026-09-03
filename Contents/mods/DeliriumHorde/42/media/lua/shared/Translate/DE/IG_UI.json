@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "Zombies-Nummer",
+    "IGUI_DelHor_Radius": "Radius",
+    "IGUI_DelHor_SpawnDelay": "Spawn-Verzögerung (Sekunden)",
+    "IGUI_DelHor_LoopCycles": "Schleifenzyklen",
+    "IGUI_DelHor_LoopCooldown": "Loop-Abklingzeit (Spielminuten)",
+    "IGUI_DelHor_ZombiesOutfit": "Zombie-Outfit",
+    "IGUI_DelHor_PickNewSquare": "Wählen Sie „Neues Quadrat“.",
+    "IGUI_DelHor_Spawn": "Laichen",
+    "IGUI_DelHor_PickedSquare": "Ausgewähltes Quadrat",
+    "IGUI_DelHor_TriggerDistance": "Auslöseentfernung"
+}

@@ -1,0 +1,6 @@
+name=Delirium Horde
+poster=poster.png
+id=DelHor
+description=Test mod for the Delirium server. Admin tool: pick a square on the ground, set a radius, a zombie count, an outfit and a trigger distance, and a horde spawns the moment a player walks into the zone. Optional spawn delay, repeat cycles and per-repeat cooldown. Server-authoritative.
+tags=Build 42
+versionMin=42.20

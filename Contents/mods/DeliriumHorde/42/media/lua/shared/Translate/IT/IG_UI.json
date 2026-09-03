@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "Numero di Zombi",
+    "IGUI_DelHor_Radius": "Raggio",
+    "IGUI_DelHor_SpawnDelay": "Ritardo di Spawn (Secondi)",
+    "IGUI_DelHor_LoopCycles": "Cicli di Loop",
+    "IGUI_DelHor_LoopCooldown": "Loop Cooldown (Minuti di Gioco)",
+    "IGUI_DelHor_ZombiesOutfit": "Vestito di Zombi",
+    "IGUI_DelHor_PickNewSquare": "Scegli Nuova Piazza",
+    "IGUI_DelHor_Spawn": "Spawn",
+    "IGUI_DelHor_PickedSquare": "Piazza Scelta",
+    "IGUI_DelHor_TriggerDistance": "Distanza di Innesco"
+}

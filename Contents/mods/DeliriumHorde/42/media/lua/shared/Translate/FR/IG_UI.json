@@ -1,0 +1,12 @@
+{
+    "IGUI_DelHor_ZombiesNumber": "Nombre de Zombies",
+    "IGUI_DelHor_Radius": "Rayon",
+    "IGUI_DelHor_SpawnDelay": "Délai d'spawn (Secondes)",
+    "IGUI_DelHor_LoopCycles": "Cycles de Loop",
+    "IGUI_DelHor_LoopCooldown": "Temps de recharge de Loop (Minutes de Jeu)",
+    "IGUI_DelHor_ZombiesOutfit": "Tenue de Zombies",
+    "IGUI_DelHor_PickNewSquare": "Choisissez un Nouveau Carré",
+    "IGUI_DelHor_Spawn": "Spawn",
+    "IGUI_DelHor_PickedSquare": "Carré Choisi",
+    "IGUI_DelHor_TriggerDistance": "Distance de Déclenchement"
+}
