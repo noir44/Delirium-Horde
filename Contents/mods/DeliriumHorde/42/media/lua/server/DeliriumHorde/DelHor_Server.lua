@@ -19,7 +19,11 @@ local function isAdminPlayer(playerObj)
     if not playerObj then return false end
     local level = playerObj:getAccessLevel()
     if not level then return false end
-    return string.lower(level) == "admin"
+    level = string.lower(level)
+
+    -- Must match the client-side gate in DelHor_Main.lua, or the menu shows
+    -- for someone whose AddEvent the server then silently drops.
+    return level == "admin" or level == "moderator" or level == "overseer" or level == "gm"
 end
 
 local function clampNumber(value, min, max, default)

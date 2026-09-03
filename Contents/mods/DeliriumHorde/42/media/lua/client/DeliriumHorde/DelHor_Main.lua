@@ -7,6 +7,21 @@ if isServer() then return end
 
 DelHorEvents = DelHorEvents or {}
 
+-- isAdmin() came back false for a player the server had logged in with
+-- role="admin" (vanilla's own AdminContextMenu, gated the same way, was
+-- missing from that client's menu too). getAccessLevel() is the value the
+-- server actually enforces, so gate on that and keep isAdmin() as a fast path.
+local function canManageEvents()
+    if getWorld():getGameMode() ~= "Multiplayer" then return true end
+    if isAdmin() then return true end
+
+    local level = getAccessLevel()
+    if not level then return false end
+    level = string.lower(level)
+
+    return level == "admin" or level == "moderator" or level == "overseer" or level == "gm"
+end
+
 local onNewEventWindow = function(square, playerObj)
     local ui = DelHor_SpawnHordeUI:new(0, 0, playerObj, square)
     ui:initialise()
@@ -18,16 +33,14 @@ local onDeleteEvent = function(eventIndex, playerObj)
 end
 
 local onWorldContextMenu = function(player, context, worldobjects, test)
-    print("[DelHor] handler: isClient="..tostring(isClient())..
-            " isAdmin="..tostring(isAdmin())..
-            " mode="..tostring(getWorld():getGameMode())..
-            " test="..tostring(test)..
-            " nobjects="..tostring(worldobjects and #worldobjects))
-    if not ((isClient() and isAdmin()) or getWorld():getGameMode() ~= "Multiplayer") then return true end
+    print("[DelHor] handler: isAdmin=" .. tostring(isAdmin()) ..
+            " accessLevel=" .. tostring(getAccessLevel()) ..
+            " allowed=" .. tostring(canManageEvents()))
+    if not canManageEvents() then return true end
     if test and ISWorldObjectContextMenu.Test then return true end
 
     local playerObj = getSpecificPlayer(player)
-    if not playerObj then print("[DelHor] bail: no playerObj") return end
+    if not playerObj then return end
 
     local square = nil
     for i, v in ipairs(worldobjects) do
@@ -35,7 +48,7 @@ local onWorldContextMenu = function(player, context, worldobjects, test)
         break
     end
     -- No square under the cursor means nothing to anchor an event to.
-    if not square then print("[DelHor] bail: no square") return end
+    if not square then return end
 
     local hordeEventOption = context:addOption(getText("ContextMenu_DelHor_Event"), worldobjects, nil)
     local subMenu = ISContextMenu:getNew(context)
@@ -55,5 +68,4 @@ local onWorldContextMenu = function(player, context, worldobjects, test)
     end
 end
 
-print("[DelHor] main loaded, handler registered")
 Events.OnFillWorldObjectContextMenu.Add(onWorldContextMenu)
