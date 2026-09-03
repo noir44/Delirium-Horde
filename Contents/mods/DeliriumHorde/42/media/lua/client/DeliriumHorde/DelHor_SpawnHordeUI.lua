@@ -17,6 +17,8 @@ local NAME_WID = 220
 local COMBO_WID = 240
 local SLIDER_WID = 200
 local VALUE_WID = 40
+-- ISTickBox spaces its rows by itemHgt plus its own internal constant of 10.
+local TICK_ROW_GAP = 10
 
 function DelHor_SpawnHordeUI:isEditing()
     return self.editIndex ~= nil
@@ -169,7 +171,7 @@ function DelHor_SpawnHordeUI:createChildren()
     farX = math.max(farX, self.healthSlider:getRight())
     y = y + BUTTON_HGT + UI_BORDER_SPACING
 
-    self.boolOptions = ISTickBox:new(x, y, 200, BUTTON_HGT, "", self, DelHor_SpawnHordeUI.onBoolOptionsChange)
+    self.boolOptions = ISTickBox:new(x, y, 200, FONT_HGT_SMALL, "", self, DelHor_SpawnHordeUI.onBoolOptionsChange)
     self.boolOptions:initialise()
     -- Must addChild *before* addOption() or ISUIElement:getKeepOnScreen()
     -- will restrict the y-position to the screen height.
@@ -191,7 +193,14 @@ function DelHor_SpawnHordeUI:createChildren()
     end
 
     farX = math.max(farX, self.boolOptions:getRight())
-    y = self.boolOptions:getBottom() + UI_BORDER_SPACING
+    -- ISTickBox:render() centres its rows inside self.height, so a height that
+    -- ended up smaller than the rows need spills them past both ends - which is
+    -- how the confirm button came to sit on top of the last option. Work from
+    -- the extent the rows actually occupy, not from the widget height.
+    local tickHeight = #self.boolOptions.options * (self.boolOptions.itemHgt + TICK_ROW_GAP) - TICK_ROW_GAP
+    self.boolOptions:setHeight(tickHeight)
+
+    y = self.boolOptions:getY() + tickHeight + UI_BORDER_SPACING
 
     local confirmText = getText("IGUI_DelHor_Spawn")
     if self:isEditing() then
