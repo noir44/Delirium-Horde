@@ -14,6 +14,7 @@ DelHorEvents.MODDATA_KEY = "DelHor.eventList"
 DelHorEvents.MAX_ZOMBIES = 500
 DelHorEvents.MAX_RADIUS = 100
 DelHorEvents.MAX_TRIGGER_DISTANCE = 200
+DelHorEvents.MAX_NAME_LENGTH = 40
 
 function DelHorEvents.count(tbl)
     if not tbl then return 0 end
@@ -30,4 +31,13 @@ function DelHorEvents.findByIndex(index)
         if event.index == index then return pos, event end
     end
     return nil, nil
+end
+
+-- One place decides how an event is named in menus and lists, so an unnamed
+-- event still reads as something a person can pick out.
+function DelHorEvents.eventLabel(event)
+    if event and event.name and event.name ~= "" then
+        return event.name
+    end
+    return getText("IGUI_DelHor_EventNumber") .. " " .. tostring(event and event.index)
 end

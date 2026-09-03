@@ -11,24 +11,32 @@ DelHor_SpawnHordeUI = ISCollapsableWindow:derive("DelHor_SpawnHordeUI")
 local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
 local UI_BORDER_SPACING = 10
 local BUTTON_HGT = FONT_HGT_SMALL + 6
+local ROW_GAP = 4
 local ENTRY_WID = 90
+local NAME_WID = 220
 local COMBO_WID = 240
 local SLIDER_WID = 200
 local VALUE_WID = 40
+
+function DelHor_SpawnHordeUI:isEditing()
+    return self.editIndex ~= nil
+end
 
 function DelHor_SpawnHordeUI:getPickedSquareText()
     return getText("IGUI_DelHor_PickedSquare") .. ": " ..
             tostring(self.selectX) .. ", " .. tostring(self.selectY) .. ", " .. tostring(self.selectZ)
 end
 
-function DelHor_SpawnHordeUI:addNumberField(labelText, defaultValue, x, y, labelWidth)
+function DelHor_SpawnHordeUI:addTextField(labelText, defaultValue, x, y, labelWidth, entryWidth, onlyNumbers)
     local label = ISLabel:new(x, y, BUTTON_HGT, labelText .. ": ", 1, 1, 1, 1, UIFont.Small, true)
     self:addChild(label)
 
-    local entry = ISTextEntryBox:new(defaultValue, x + labelWidth + UI_BORDER_SPACING, y, ENTRY_WID, BUTTON_HGT)
+    local entry = ISTextEntryBox:new(defaultValue, x + labelWidth + UI_BORDER_SPACING, y, entryWidth, BUTTON_HGT)
     entry:initialise()
     entry:instantiate()
-    entry:setOnlyNumbers(true)
+    if onlyNumbers then
+        entry:setOnlyNumbers(true)
+    end
     self:addChild(entry)
 
     return label, entry
@@ -37,14 +45,17 @@ end
 function DelHor_SpawnHordeUI:createChildren()
     ISCollapsableWindow.createChildren(self)
 
+    local event = self.editEvent
     local x = UI_BORDER_SPACING + 1
     local y = self:titleBarHeight() + UI_BORDER_SPACING
     local farX = x
 
-    -- Everything is laid out off titleBarHeight() and the measured font height,
-    -- because B42 sizes both from the player's UI scale.
+    -- Laid out off titleBarHeight() and the measured font height, because B42
+    -- sizes both from the player's UI scale. Rows sit ROW_GAP apart; only the
+    -- gaps between groups use the wider UI_BORDER_SPACING.
     local labelColW = 0
     local labelTexts = {
+        getText("IGUI_DelHor_Name"),
         getText("IGUI_DelHor_ZombiesNumber"),
         getText("IGUI_DelHor_Radius"),
         getText("IGUI_DelHor_TriggerDistance"),
@@ -76,29 +87,35 @@ function DelHor_SpawnHordeUI:createChildren()
     farX = math.max(farX, self.pickedSquareLabel:getRight())
     y = y + BUTTON_HGT + UI_BORDER_SPACING
 
-    self.zombiesNbrLabel, self.zombiesNbr =
-        self:addNumberField(getText("IGUI_DelHor_ZombiesNumber"), "1", x, y, labelColW)
+    self.nameLbl, self.name = self:addTextField(getText("IGUI_DelHor_Name"),
+            event and event.name or "", x, y, labelColW, NAME_WID, false)
+    farX = math.max(farX, self.name:getRight())
+    y = y + BUTTON_HGT + UI_BORDER_SPACING
+
+    self.zombiesNbrLabel, self.zombiesNbr = self:addTextField(getText("IGUI_DelHor_ZombiesNumber"),
+            tostring(event and event.zNumber or 1), x, y, labelColW, ENTRY_WID, true)
     farX = math.max(farX, self.zombiesNbr:getRight())
-    y = y + BUTTON_HGT + UI_BORDER_SPACING
+    y = y + BUTTON_HGT + ROW_GAP
 
-    self.radiusLbl, self.radius =
-        self:addNumberField(getText("IGUI_DelHor_Radius"), "1", x, y, labelColW)
-    y = y + BUTTON_HGT + UI_BORDER_SPACING
+    -- The field is a size in squares; the stored radius is that size minus one.
+    self.radiusLbl, self.radius = self:addTextField(getText("IGUI_DelHor_Radius"),
+            tostring(event and ((event.radius or 0) + 1) or 1), x, y, labelColW, ENTRY_WID, true)
+    y = y + BUTTON_HGT + ROW_GAP
 
-    self.triggerDistanceLabel, self.triggerDistance =
-        self:addNumberField(getText("IGUI_DelHor_TriggerDistance"), "20", x, y, labelColW)
-    y = y + BUTTON_HGT + UI_BORDER_SPACING
+    self.triggerDistanceLabel, self.triggerDistance = self:addTextField(getText("IGUI_DelHor_TriggerDistance"),
+            tostring(event and event.triggerDistance or 20), x, y, labelColW, ENTRY_WID, true)
+    y = y + BUTTON_HGT + ROW_GAP
 
-    self.spawnDelayLabel, self.spawnDelay =
-        self:addNumberField(getText("IGUI_DelHor_SpawnDelay"), "0", x, y, labelColW)
-    y = y + BUTTON_HGT + UI_BORDER_SPACING
+    self.spawnDelayLabel, self.spawnDelay = self:addTextField(getText("IGUI_DelHor_SpawnDelay"),
+            tostring(event and event.delay or 0), x, y, labelColW, ENTRY_WID, true)
+    y = y + BUTTON_HGT + ROW_GAP
 
-    self.loopForLabel, self.loopCycles =
-        self:addNumberField(getText("IGUI_DelHor_LoopCycles"), "0", x, y, labelColW)
-    y = y + BUTTON_HGT + UI_BORDER_SPACING
+    self.loopForLabel, self.loopCycles = self:addTextField(getText("IGUI_DelHor_LoopCycles"),
+            tostring(event and event.loopCycles or 0), x, y, labelColW, ENTRY_WID, true)
+    y = y + BUTTON_HGT + ROW_GAP
 
-    self.loopDelayLabel, self.loopCooldown =
-        self:addNumberField(getText("IGUI_DelHor_LoopCooldown"), "0", x, y, labelColW)
+    self.loopDelayLabel, self.loopCooldown = self:addTextField(getText("IGUI_DelHor_LoopCooldown"),
+            tostring(event and event.loopCooldown or 0), x, y, labelColW, ENTRY_WID, true)
     y = y + BUTTON_HGT + UI_BORDER_SPACING
 
     self.outfitLbl = ISLabel:new(x, y, BUTTON_HGT, getText("IGUI_DelHor_ZombiesOutfit") .. ": ",
@@ -129,8 +146,12 @@ function DelHor_SpawnHordeUI:createChildren()
         end
     end
 
+    if event and event.zOutfit then
+        self:selectOutfit(event.zOutfit)
+    end
+
     farX = math.max(farX, self.outfit:getRight())
-    y = y + BUTTON_HGT + UI_BORDER_SPACING
+    y = y + BUTTON_HGT + ROW_GAP
 
     self.healthSliderTitle = ISDebugUtils.addLabelNoReturnOffset(self, "Health", x, y,
             getText("IGUI_XP_Health") .. ": ", UIFont.Small, true)
@@ -142,7 +163,8 @@ function DelHor_SpawnHordeUI:createChildren()
     self.healthSlider.pretext = getText("IGUI_XP_Health") .. ": "
     self.healthSlider.valueLabel = self.healthSliderLabel
     self.healthSlider:setValues(0, 2, 0.1, 0.1, true)
-    self.healthSlider.currentValue = 1.0
+    self.healthSlider.currentValue = event and event.zHealth or 1.0
+    self.healthSliderLabel:setName(ISDebugUtils.printval(self.healthSlider.currentValue, 3))
 
     farX = math.max(farX, self.healthSlider:getRight())
     y = y + BUTTON_HGT + UI_BORDER_SPACING
@@ -159,19 +181,33 @@ function DelHor_SpawnHordeUI:createChildren()
     self.boolOptions:addOption(getText("IGUI_SpawnHorde_Invulnerable"))
     self.boolOptions:addOption(getText("IGUI_SpawnHorde_Sitting"))
 
+    if event then
+        self.boolOptions.selected[1] = event.isKnockedDown == true
+        self.boolOptions.selected[2] = event.isCrawler == true
+        self.boolOptions.selected[3] = event.isFakeDead == true
+        self.boolOptions.selected[4] = event.isFallOnFront == true
+        self.boolOptions.selected[5] = event.isInvulnerable == true
+        self.boolOptions.selected[6] = event.isSitting == true
+    end
+
     farX = math.max(farX, self.boolOptions:getRight())
     y = self.boolOptions:getBottom() + UI_BORDER_SPACING
 
+    local confirmText = getText("IGUI_DelHor_Spawn")
+    if self:isEditing() then
+        confirmText = getText("IGUI_DelHor_Save")
+    end
+
     local buttonWid = UI_BORDER_SPACING * 2 + math.max(
-            getTextManager():MeasureStringX(UIFont.Small, getText("IGUI_DelHor_Spawn")),
+            getTextManager():MeasureStringX(UIFont.Small, confirmText),
+            getTextManager():MeasureStringX(UIFont.Small, getText("IGUI_DelHor_Delete")),
             getTextManager():MeasureStringX(UIFont.Small, getText("UI_Close")))
 
-    local width = math.max(farX + UI_BORDER_SPACING + 1, buttonWid * 2 + UI_BORDER_SPACING * 3)
+    local width = math.max(farX + UI_BORDER_SPACING + 1, buttonWid * 3 + UI_BORDER_SPACING * 4)
     self:setWidth(width)
     self:setHeight(y + BUTTON_HGT + UI_BORDER_SPACING + 1)
 
-    self.add = ISButton:new(x, y, buttonWid, BUTTON_HGT, getText("IGUI_DelHor_Spawn"),
-            self, DelHor_SpawnHordeUI.onSpawn)
+    self.add = ISButton:new(x, y, buttonWid, BUTTON_HGT, confirmText, self, DelHor_SpawnHordeUI.onConfirm)
     self.add.anchorTop = false
     self.add.anchorBottom = true
     self.add:initialise()
@@ -179,18 +215,40 @@ function DelHor_SpawnHordeUI:createChildren()
     self.add.borderColor = {r=1, g=1, b=1, a=0.1}
     self:addChild(self.add)
 
+    -- Delete sits next to Save, so an event can be dropped without going back
+    -- out to the context menu to find it again.
+    if self:isEditing() then
+        self.deleteButton = ISButton:new(self.add:getRight() + UI_BORDER_SPACING, y, buttonWid, BUTTON_HGT,
+                getText("IGUI_DelHor_Delete"), self, DelHor_SpawnHordeUI.onDelete)
+        self.deleteButton.anchorTop = false
+        self.deleteButton.anchorBottom = true
+        self.deleteButton:initialise()
+        self.deleteButton:instantiate()
+        self.deleteButton:enableCancelColor()
+        self.deleteButton.borderColor = {r=1, g=1, b=1, a=0.1}
+        self:addChild(self.deleteButton)
+    end
+
     self.closeButton2 = ISButton:new(width - buttonWid - x, y, buttonWid, BUTTON_HGT, getText("UI_Close"),
             self, DelHor_SpawnHordeUI.close)
     self.closeButton2.anchorTop = false
     self.closeButton2.anchorBottom = true
     self.closeButton2:initialise()
     self.closeButton2:instantiate()
-    self.closeButton2:enableCancelColor()
     self.closeButton2.borderColor = {r=1, g=1, b=1, a=0.1}
     self:addChild(self.closeButton2)
 
     if self.centerOnCreate then
         self:centerOnPlayerScreen()
+    end
+end
+
+function DelHor_SpawnHordeUI:selectOutfit(outfitName)
+    for i, option in ipairs(self.outfit.options) do
+        if option.data == outfitName then
+            self.outfit.selected = i
+            return
+        end
     end
 end
 
@@ -227,6 +285,14 @@ function DelHor_SpawnHordeUI:onSliderChange(_newval, _slider)
     if _slider.valueLabel then
         _slider.valueLabel:setName(ISDebugUtils.printval(_newval, 3))
     end
+end
+
+function DelHor_SpawnHordeUI:getName()
+    local name = self.name:getInternalText() or ""
+    if string.len(name) > DelHorEvents.MAX_NAME_LENGTH then
+        name = string.sub(name, 1, DelHorEvents.MAX_NAME_LENGTH)
+    end
+    return name
 end
 
 function DelHor_SpawnHordeUI:getZombiesNumber()
@@ -276,7 +342,7 @@ function DelHor_SpawnHordeUI:getOutfit()
     return option.data
 end
 
-function DelHor_SpawnHordeUI:onSpawn()
+function DelHor_SpawnHordeUI:buildArgs()
     local outfit = self:getOutfit()
 
     -- force female or male chance if you've selected a outfit that's only for male or female
@@ -290,7 +356,8 @@ function DelHor_SpawnHordeUI:onSpawn()
         end
     end
 
-    local args = {
+    return {
+        name = self:getName(),
         zNumber = self:getZombiesNumber(),
         radius = self:getRadius(),
         delay = self:getSpawnDelay(),
@@ -309,8 +376,26 @@ function DelHor_SpawnHordeUI:onSpawn()
         zHealth = self.healthSlider:getCurrentValue(),
         centralSquare = { x = self.selectX, y = self.selectY, z = self.selectZ },
     }
+end
+
+function DelHor_SpawnHordeUI:onConfirm()
+    local args = self:buildArgs()
+
+    if self:isEditing() then
+        args.index = self.editIndex
+        sendClientCommand(self.chr, DelHorEvents.MODULE, "UpdateEvent", args)
+        self:close()
+        return
+    end
 
     sendClientCommand(self.chr, DelHorEvents.MODULE, "AddEvent", args)
+end
+
+function DelHor_SpawnHordeUI:onDelete()
+    if not self:isEditing() then return end
+
+    sendClientCommand(self.chr, DelHorEvents.MODULE, "DeleteEvent", { index = self.editIndex })
+    self:close()
 end
 
 function DelHor_SpawnHordeUI:onSelectNewSquare()
@@ -346,6 +431,10 @@ function DelHor_SpawnHordeUI:prerender()
 end
 
 function DelHor_SpawnHordeUI:addMarkers(square, spawnSize, triggerSize)
+    -- An event being edited can sit in an unloaded chunk, so there may be no
+    -- square to hang the markers on.
+    if not square then return end
+
     self.triggerMarker = getWorldMarkers():addGridSquareMarker(square, 0.8, 0.8, 0.0, true, triggerSize)
     self.triggerMarker:setScaleCircleTexture(true)
 
@@ -378,7 +467,10 @@ function DelHor_SpawnHordeUI:close()
     self:removeFromUIManager()
 end
 
-function DelHor_SpawnHordeUI:new(x, y, character, square)
+-- `event` opens the window on an existing event instead of a blank one; the
+-- square may then be nil, because the admin can be editing a zone nowhere near
+-- them, whose chunk is not loaded.
+function DelHor_SpawnHordeUI:new(x, y, character, square, event)
     -- Provisional size; createChildren() measures the real one and re-centres.
     local width = 520
     local height = 560
@@ -389,15 +481,44 @@ function DelHor_SpawnHordeUI:new(x, y, character, square)
     o.width = width
     o.height = height
     o.chr = character
-    o.title = getText("IGUI_DelHor_Title")
+    o.editEvent = event
+    o.editIndex = event and event.index
     o.moveWithMouse = true
-    o.selectX = square:getX()
-    o.selectY = square:getY()
-    o.selectZ = square:getZ()
     o.anchorLeft = true
     o.anchorRight = true
     o.anchorTop = true
     o.anchorBottom = true
-    o:addMarkers(square, 1, 20)
+
+    if event then
+        o.title = getText("IGUI_DelHor_EditTitle")
+    else
+        o.title = getText("IGUI_DelHor_Title")
+    end
+
+    if event and event.centralSquare then
+        o.selectX = event.centralSquare.x
+        o.selectY = event.centralSquare.y
+        o.selectZ = event.centralSquare.z
+    elseif square then
+        o.selectX = square:getX()
+        o.selectY = square:getY()
+        o.selectZ = square:getZ()
+    else
+        o.selectX = math.floor(character:getX())
+        o.selectY = math.floor(character:getY())
+        o.selectZ = math.floor(character:getZ())
+    end
+
+    local markerSquare = square
+    if not markerSquare then
+        markerSquare = getCell():getGridSquare(o.selectX, o.selectY, o.selectZ)
+    end
+
+    if event then
+        o:addMarkers(markerSquare, (event.radius or 0) + 1, (event.radius or 0) + (event.triggerDistance or 20))
+    else
+        o:addMarkers(markerSquare, 1, 20)
+    end
+
     return o
 end

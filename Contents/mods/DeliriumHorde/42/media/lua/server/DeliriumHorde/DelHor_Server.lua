@@ -34,6 +34,17 @@ local function clampNumber(value, min, max, default)
     return n
 end
 
+local function sanitizeName(value)
+    if type(value) ~= "string" then return "" end
+
+    local name = string.gsub(value, "^%s*(.-)%s*$", "%1")
+    if string.len(name) > DelHorEvents.MAX_NAME_LENGTH then
+        name = string.sub(name, 1, DelHorEvents.MAX_NAME_LENGTH)
+    end
+
+    return name
+end
+
 DelHorEvents.UpdateClients = function()
     if isServer() then
         local onlinePlayers = getOnlinePlayers()
@@ -62,6 +73,7 @@ local function sanitize(values)
     if not square.x or not square.y or not square.z then return nil end
 
     return {
+        name = sanitizeName(values.name),
         zNumber = clampNumber(values.zNumber, 1, DelHorEvents.MAX_ZOMBIES, 1),
         radius = clampNumber(values.radius, 0, DelHorEvents.MAX_RADIUS, 0),
         triggerDistance = clampNumber(values.triggerDistance, 1, DelHorEvents.MAX_TRIGGER_DISTANCE, 20),
@@ -115,6 +127,25 @@ DelHorEvents.RemoveEvent = function(index)
     if pos then
         table.remove(DelHorEvents.eventList, pos)
     end
+end
+
+DelHorEvents.UpdateEvent = function(index, values, playerObj)
+    if not isAdminPlayer(playerObj) then return end
+    if not DelHorEvents.eventList then return end
+    if not index then return end
+
+    local pos, existing = DelHorEvents.findByIndex(index)
+    if not existing then return end
+
+    local event = sanitize(values)
+    if not event then return end
+
+    -- Keep the identity the admin selected; everything else is what they just
+    -- typed, including a cooldown reset from sanitize().
+    event.index = existing.index
+
+    DelHorEvents.eventList[pos] = event
+    DelHorEvents.UpdateClients()
 end
 
 DelHorEvents.DeleteEvent = function(index, playerObj)
@@ -222,6 +253,8 @@ local function onClientCommand(module, command, playerObj, args)
 
     if command == "AddEvent" then
         DelHorEvents.AddEvent(args, playerObj)
+    elseif command == "UpdateEvent" then
+        DelHorEvents.UpdateEvent(args and args.index, args, playerObj)
     elseif command == "DeleteEvent" then
         DelHorEvents.DeleteEvent(args and args.index, playerObj)
     elseif command == "TriggerEvent" then

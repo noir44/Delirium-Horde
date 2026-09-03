@@ -22,6 +22,10 @@ local function canManageEvents()
     return level == "admin" or level == "moderator" or level == "overseer" or level == "gm"
 end
 
+local onManageEvents = function(playerObj)
+    DelHor_EventListUI.open(playerObj)
+end
+
 local onNewEventWindow = function(square, playerObj)
     local ui = DelHor_SpawnHordeUI:new(0, 0, playerObj, square)
     ui:initialise()
@@ -33,9 +37,6 @@ local onDeleteEvent = function(eventIndex, playerObj)
 end
 
 local onWorldContextMenu = function(player, context, worldobjects, test)
-    print("[DelHor] handler: isAdmin=" .. tostring(isAdmin()) ..
-            " accessLevel=" .. tostring(getAccessLevel()) ..
-            " allowed=" .. tostring(canManageEvents()))
     if not canManageEvents() then return true end
     if test and ISWorldObjectContextMenu.Test then return true end
 
@@ -56,6 +57,8 @@ local onWorldContextMenu = function(player, context, worldobjects, test)
 
     subMenu:addOption(getText("ContextMenu_DelHor_NewEvent"), square, onNewEventWindow, playerObj)
 
+    subMenu:addOption(getText("ContextMenu_DelHor_EditEvent"), playerObj, onManageEvents)
+
     local deleteEventOption = subMenu:addOption(getText("ContextMenu_DelHor_DeleteEvent"), nil, nil)
     local delEventSubmenu = ISContextMenu:getNew(subMenu)
     subMenu:addSubMenu(deleteEventOption, delEventSubmenu)
@@ -63,7 +66,7 @@ local onWorldContextMenu = function(player, context, worldobjects, test)
 
     if not DelHorEvents.eventList then return end
     for i, event in ipairs(DelHorEvents.eventList) do
-        delEventSubmenu:addOptionOnTop(getText("IGUI_DelHor_EventNumber") .. " " .. tostring(event.index),
+        delEventSubmenu:addOptionOnTop(DelHorEvents.eventLabel(event),
                 event.index, onDeleteEvent, playerObj)
     end
 end

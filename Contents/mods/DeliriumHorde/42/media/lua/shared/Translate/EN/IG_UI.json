@@ -1,6 +1,9 @@
 {
     "IGUI_DelHor_Title": "Horde Event",
+    "IGUI_DelHor_EditTitle": "Edit Horde Event",
+    "IGUI_DelHor_ListTitle": "Horde Events",
     "IGUI_DelHor_EventNumber": "Event",
+    "IGUI_DelHor_Name": "Name",
     "IGUI_DelHor_ZombiesNumber": "Zombies Number",
     "IGUI_DelHor_Radius": "Radius",
     "IGUI_DelHor_SpawnDelay": "Spawn Delay (Real Seconds)",
@@ -9,6 +12,10 @@
     "IGUI_DelHor_ZombiesOutfit": "Zombies' Outfit",
     "IGUI_DelHor_PickNewSquare": "Pick New Square",
     "IGUI_DelHor_Spawn": "Spawn",
+    "IGUI_DelHor_Save": "Save",
+    "IGUI_DelHor_Edit": "Edit",
+    "IGUI_DelHor_Delete": "Delete",
+    "IGUI_DelHor_NoEvents": "No events yet",
     "IGUI_DelHor_PickedSquare": "Picked Square",
     "IGUI_DelHor_TriggerDistance": "Trigger Distance"
 }

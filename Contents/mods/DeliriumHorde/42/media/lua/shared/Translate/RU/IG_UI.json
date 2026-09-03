@@ -1,6 +1,9 @@
 {
     "IGUI_DelHor_Title": "Событие орды",
+    "IGUI_DelHor_EditTitle": "Редактирование события",
+    "IGUI_DelHor_ListTitle": "События орды",
     "IGUI_DelHor_EventNumber": "Событие",
+    "IGUI_DelHor_Name": "Название",
     "IGUI_DelHor_ZombiesNumber": "Количество зомби",
     "IGUI_DelHor_Radius": "Радиус спавна",
     "IGUI_DelHor_SpawnDelay": "Задержка спавна (реальные секунды)",
@@ -9,6 +12,10 @@
     "IGUI_DelHor_ZombiesOutfit": "Одежда зомби",
     "IGUI_DelHor_PickNewSquare": "Выбрать клетку",
     "IGUI_DelHor_Spawn": "Создать",
+    "IGUI_DelHor_Save": "Сохранить",
+    "IGUI_DelHor_Edit": "Редактировать",
+    "IGUI_DelHor_Delete": "Удалить",
+    "IGUI_DelHor_NoEvents": "Событий пока нет",
     "IGUI_DelHor_PickedSquare": "Выбранная клетка",
     "IGUI_DelHor_TriggerDistance": "Дистанция срабатывания"
 }

@@ -1,6 +1,7 @@
 {
-    "ContextMenu_DelHor_Event": "Событие Орды",
+    "ContextMenu_DelHor_Event": "Событие орды",
     "ContextMenu_DelHor_NewEvent": "Новое событие",
+    "ContextMenu_DelHor_EditEvent": "Управление событиями",
     "ContextMenu_DelHor_DeleteEvent": "Удалить событие",
     "ContextMenu_DelHor_DeleteAllEvents": "Удалить все события"
 }
