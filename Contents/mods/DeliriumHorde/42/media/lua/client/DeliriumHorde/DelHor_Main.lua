@@ -18,11 +18,16 @@ local onDeleteEvent = function(eventIndex, playerObj)
 end
 
 local onWorldContextMenu = function(player, context, worldobjects, test)
+    print("[DelHor] handler: isClient="..tostring(isClient())..
+            " isAdmin="..tostring(isAdmin())..
+            " mode="..tostring(getWorld():getGameMode())..
+            " test="..tostring(test)..
+            " nobjects="..tostring(worldobjects and #worldobjects))
     if not ((isClient() and isAdmin()) or getWorld():getGameMode() ~= "Multiplayer") then return true end
     if test and ISWorldObjectContextMenu.Test then return true end
 
     local playerObj = getSpecificPlayer(player)
-    if not playerObj then return end
+    if not playerObj then print("[DelHor] bail: no playerObj") return end
 
     local square = nil
     for i, v in ipairs(worldobjects) do
@@ -30,7 +35,7 @@ local onWorldContextMenu = function(player, context, worldobjects, test)
         break
     end
     -- No square under the cursor means nothing to anchor an event to.
-    if not square then return end
+    if not square then print("[DelHor] bail: no square") return end
 
     local hordeEventOption = context:addOption(getText("ContextMenu_DelHor_Event"), worldobjects, nil)
     local subMenu = ISContextMenu:getNew(context)
@@ -50,4 +55,5 @@ local onWorldContextMenu = function(player, context, worldobjects, test)
     end
 end
 
+print("[DelHor] main loaded, handler registered")
 Events.OnFillWorldObjectContextMenu.Add(onWorldContextMenu)
