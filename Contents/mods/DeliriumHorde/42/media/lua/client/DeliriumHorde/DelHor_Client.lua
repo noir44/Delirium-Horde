@@ -93,7 +93,7 @@ local OccasionalCheck = function(playerObj)
             local dy = playerY - square.y
 
             if (dx * dx + dy * dy) < (triggerDistance * triggerDistance) then
-                if not event.currCooldown or event.currCooldown == 0 then
+                if not event.spent and (not event.currCooldown or event.currCooldown == 0) then
                     triggerEvent(event)
                 end
             end

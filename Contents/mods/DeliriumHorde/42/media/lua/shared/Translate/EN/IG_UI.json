@@ -16,6 +16,7 @@
     "IGUI_DelHor_Edit": "Edit",
     "IGUI_DelHor_Delete": "Delete",
     "IGUI_DelHor_NoEvents": "No events yet",
+    "IGUI_DelHor_Spent": "spent",
     "IGUI_DelHor_PickedSquare": "Picked Square",
     "IGUI_DelHor_TriggerDistance": "Trigger Distance"
 }

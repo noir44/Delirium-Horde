@@ -16,6 +16,7 @@
     "IGUI_DelHor_Edit": "Редактировать",
     "IGUI_DelHor_Delete": "Удалить",
     "IGUI_DelHor_NoEvents": "Событий пока нет",
+    "IGUI_DelHor_Spent": "исчерпано",
     "IGUI_DelHor_PickedSquare": "Выбранная клетка",
     "IGUI_DelHor_TriggerDistance": "Дистанция срабатывания"
 }

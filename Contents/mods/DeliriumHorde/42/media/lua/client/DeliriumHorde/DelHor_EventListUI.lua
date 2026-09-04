@@ -109,6 +109,10 @@ function DelHor_EventListUI:refresh()
                 "   " .. getText("IGUI_DelHor_ZombiesNumber") .. ": " .. tostring(event.zNumber) ..
                 "   " .. getText("IGUI_DelHor_LoopCycles") .. ": " .. tostring(event.loopCycles)
 
+        if event.spent then
+            text = text .. "   (" .. getText("IGUI_DelHor_Spent") .. ")"
+        end
+
         self.list:addItem(text, event)
 
         if previousIndex and event.index == previousIndex then

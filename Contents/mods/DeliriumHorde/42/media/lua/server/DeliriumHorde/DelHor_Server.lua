@@ -176,11 +176,12 @@ DelHorEvents.TriggerEvent = function(index, playerObj)
 
     local _, event = DelHorEvents.findByIndex(index)
     if not event then return end
+    if event.spent then return end
     if event.currCooldown and event.currCooldown > 0 then return end
     if not isPlayerNearEvent(playerObj, event) then return end
 
-    -- Snapshot now. The event may be deleted a few lines below, but the horde
-    -- it already promised still has to spawn when the client's delay runs out.
+    -- Snapshot now, because the horde this trigger promised has to spawn when
+    -- the client's delay runs out, whatever the event looks like by then.
     if playerObj then
         pendingSpawns[playerObj:getUsername()] = { index = index, event = event, age = 0 }
     end
@@ -190,8 +191,12 @@ DelHorEvents.TriggerEvent = function(index, playerObj)
         event.currCooldown = event.loopCooldown or 0
     end
 
+    -- Out of repeats. The event stays in the list so it can still be renamed,
+    -- moved or re-armed from the editor; it just stops firing. Deleting it here
+    -- threw away the whole configuration on its last trigger.
     if not event.loopCycles or event.loopCycles < 0 then
-        DelHorEvents.RemoveEvent(index)
+        event.loopCycles = 0
+        event.spent = true
     end
 
     DelHorEvents.UpdateClients()
